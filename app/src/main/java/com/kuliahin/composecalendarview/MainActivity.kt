@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import com.kuliahin.compose.calendarview.CalendarView
 import com.kuliahin.compose.calendarview.data.CalendarSelection
 import com.kuliahin.compose.calendarview.data.WeekdaysType
-import java.util.*
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.fillMaxSize(),
                         weekdaysType = WeekdaysType.Static,
                         calendarSelection = CalendarSelection.Range,
-                        locale = Locale.US
+                        locale = Locale.US,
                     )
                 }
             }
