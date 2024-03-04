@@ -19,6 +19,9 @@ jobs:
           java-version: '17'
           distribution: 'oracle'
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Release build
         run: ./gradlew lib:assembleRelease
 
