@@ -25,16 +25,12 @@ jobs:
       - name: Release build
         run: ./gradlew lib:assembleRelease
 
-      - name: Sign publication
-        run: ./gradlew lib:signReleasePublication
-        env:
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-
       - name: Publish to MavenCentral
         run:  ./gradlew lib:publish
         env:
           RELEASE_VERSION: ${{ github.event.release.tag_name }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
