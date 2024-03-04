@@ -74,6 +74,26 @@ fun CalendarView(
 
     val itemWidth = LocalConfiguration.current.screenWidthDp / DayOfWeek.entries.size
 
+    val onDayClickCallback: (LocalDate) -> Unit = { clickedDate ->
+        when (calendarSelection) {
+            CalendarSelection.Single -> listOf(clickedDate)
+            CalendarSelection.Range ->
+                if (selectedDates.size == 1) {
+                    selectedDates + clickedDate
+                } else {
+                    listOf(clickedDate)
+                }
+
+            else -> null
+        }?.let { dates ->
+            selectedDates = dates
+
+            onDatesSelected?.invoke(dates)
+        }
+
+        onDayClick(clickedDate)
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
@@ -147,26 +167,6 @@ fun CalendarView(
                     }
                 }
             }
-        }
-
-        val onDayClickCallback: (LocalDate) -> Unit = { clickedDate ->
-            when (calendarSelection) {
-                CalendarSelection.Single -> listOf(clickedDate)
-                CalendarSelection.Range ->
-                    if (selectedDates.size == 1) {
-                        selectedDates + clickedDate
-                    } else {
-                        listOf(clickedDate)
-                    }
-
-                else -> null
-            }?.let { dates ->
-                selectedDates = dates
-
-                onDatesSelected?.invoke(dates)
-            }
-
-            onDayClick(clickedDate)
         }
 
         if (calendarSwipeDirection == CalendarSwipeDirection.Horizontal) {
