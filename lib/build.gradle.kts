@@ -7,24 +7,15 @@ plugins {
 }
 
 android {
-    namespace = "com.kuliahin.compose.calendarview"
-    compileSdk = 33
-
     defaultConfig {
-        // TODO: Downgrade to 23
-        minSdk = 26
-
-        consumerProguardFiles("consumer-rules.pro")
+        namespace = "com.kuliahin.compose.calendarview"
+        compileSdk = 34
+        minSdk = 26 // TODO: Downgrade to 23
     }
 
     buildTypes {
         all {
             isMinifyEnabled = false
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
 

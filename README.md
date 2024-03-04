@@ -2,12 +2,11 @@
 
 The repository hosts the open-source code of Android Compose Calendar library.
 
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 [![Lint](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml/badge.svg)](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml)
 [![GitHub release](https://img.shields.io/github/release/AndrewKuliahin96/compose-calendar-view.svg?maxAge=10)](https://github.com/AndrewKuliahin96/compose-calendar-view/releases)
 
 <div>
-  <img align="right" width="35%" src="pics/example_screenshot.webp" alt="">
+  <img align="right" width="40%" src="pics/example_screenshot.webp" alt="">
 </div>
 
 ### Features
@@ -25,6 +24,7 @@ The repository hosts the open-source code of Android Compose Calendar library.
 
 ### System Requirements
 
+* `compileSdk` API level 34
 * `minSdk` API level 26 or higher
 
 ### Installation
