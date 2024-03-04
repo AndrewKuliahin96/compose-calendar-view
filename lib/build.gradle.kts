@@ -2,14 +2,16 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
+    `maven-publish`
+    signing
 }
 
 android {
     namespace = "com.kuliahin.compose.calendarview"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
-        // TODO: Set to 21 or at least 23!
+        // TODO: Downgrade to 23
         minSdk = 26
 
         consumerProguardFiles("consumer-rules.pro")
@@ -48,6 +50,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -69,4 +77,73 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.kuliahin"
+            artifactId = "calendar-view"
+            version = System.getenv("RELEASE_VERSION")
+
+            afterEvaluate {
+                from(components["release"])
+            }
+
+            pom {
+                pom.name = "Compose Calendar View"
+                pom.packaging = "aar"
+                pom.description = "Compose Calendar View (Android)"
+                pom.url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
+
+                scm {
+                    url.set("https://github.com/AndrewKuliahin96/compose-calendar-view")
+                    connection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
+                    developerConnection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
+                }
+
+                licenses {
+                    license {
+                        name = "MIT license"
+                        url = "https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "andrew_kuliahin"
+                        name = "Andrew Kuliahin"
+                        email = "kulagin.andrew38@gmail.com"
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+
+            val isSnapshot = version.toString().endsWith("SNAPSHOT")
+
+            setUrl(provider {
+                if (isSnapshot) snapshotsRepoUrl else releasesRepoUrl
+            })
+
+            credentials {
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(
+        System.getenv("SIGNING_KEY_ID"),
+        System.getenv("SIGNING_KEY"),
+        System.getenv("SIGNING_PASSWORD")
+    )
+    sign(publishing.publications)
 }

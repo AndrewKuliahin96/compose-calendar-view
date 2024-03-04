@@ -5,7 +5,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.kuliahin.compose.calendarview.paging.DatesPagingSource
 
-// TODO: Make it open?
 class CalendarViewModel : ViewModel() {
     val dates by lazy {
         Pager(
