@@ -1,0 +1,46 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+group = GROUP_ID
+version = VERSION
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION
+
+                from components.release
+
+                pom {
+                    name = ARTIFACT_ID
+                    description = 'Compose Calendar View (Android)'
+                    url = 'https://github.com/AndrewKuliahin96/compose-calendar-view'
+
+                    licenses {
+                        license {
+                            name = 'MIT license'
+                            url = 'https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'andrew_kuliahin'
+                            name = 'Andrew Kuliahin'
+                            email = 'kulagin.andrew38@gmail.com'
+                        }
+                    }
+
+                    scm {
+                        connection = 'https://github.com/AndrewKuliahin96/compose-calendar-view.git'
+                        developerConnection = 'https://github.com/AndrewKuliahin96/compose-calendar-view.git'
+                        url = 'https://github.com/AndrewKuliahin96/compose-calendar-view'
+                    }
+                }
+            }
+        }
+    }
+}
