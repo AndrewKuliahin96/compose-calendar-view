@@ -53,11 +53,6 @@ dependencies {
     // Calendar view
     implementation(project(path = ":lib"))
 
-    // Paging
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
-    implementation(libs.androidx.paging.common.android)
-
     // Compose
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
