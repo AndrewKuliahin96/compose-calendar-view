@@ -24,12 +24,6 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-/**
- * View that represent one day in the calendar
- * @param date date that view should represent
- * @param weekdayLabel flag that indicates if name of week day should be visible above day value
- * @param modifier view modifier
- */
 @Composable
 fun DayView(
     date: LocalDate,

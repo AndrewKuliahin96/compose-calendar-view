@@ -9,7 +9,7 @@ plugins {
 
 description = "Android Compose Calendar View"
 group = "com.kuliahin"
-version = System.getenv("RELEASE_VERSION") ?: "0.0.1"
+version = System.getenv("RELEASE_VERSION") ?: ""
 
 android {
     defaultConfig {
