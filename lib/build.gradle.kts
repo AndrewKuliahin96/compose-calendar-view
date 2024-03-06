@@ -2,13 +2,14 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
+    id("net.thebugmc.gradle.sonatype-central-portal-publisher") version "1.2.3"
+    `maven-publish`
+    signing
 }
 
-extra.set("GROUP_ID", "com.kuliahin")
-extra.set("ARTIFACT_ID", "compose.calendar-view")
-extra.set("VERSION", System.getenv("RELEASE_VERSION"))
-
-apply(from = "${rootDir}/scripts/publish-module.gradle")
+description = "Android Compose Calendar View"
+group = "com.kuliahin"
+version = System.getenv("RELEASE_VERSION")
 
 android {
     defaultConfig {
@@ -24,12 +25,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     buildFeatures {
@@ -72,4 +73,44 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+}
+
+centralPortal {
+    username = System.getenv("CENTRAL_USERNAME")
+    password = System.getenv("CENTRAL_TOKEN")
+
+    pom {
+        name = "Android Compose Calendar View"
+        description = "Android Compose Calendar View library"
+        url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
+
+        licenses {
+            license {
+                name = "MIT license"
+                url = "https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE"
+            }
+        }
+
+        developers {
+            developer {
+                name = "Andrew Kuliahin"
+                email = "kulagin.andrew38@gmail.com"
+                url = "https://github.com/AndrewKuliahin96"
+            }
+        }
+
+        scm {
+            connection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
+            developerConnection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
+            url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(
+        System.getenv("SIGNING_KEY_ID"),
+        System.getenv("SIGNING_KEY"),
+        System.getenv("SIGNING_PASSWORD")
+    )
 }
