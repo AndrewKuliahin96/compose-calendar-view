@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +43,7 @@ import com.kuliahin.compose.calendarview.component.CalendarFlowRow
 import com.kuliahin.compose.calendarview.data.CalendarSelection
 import com.kuliahin.compose.calendarview.data.CalendarSwipeDirection
 import com.kuliahin.compose.calendarview.data.CalendarTheme
+import com.kuliahin.compose.calendarview.data.DayTheme
 import com.kuliahin.compose.calendarview.data.WeekdaysType
 import com.kuliahin.compose.calendarview.data.calendarDefaultTheme
 import kotlinx.coroutines.Dispatchers
@@ -59,20 +61,22 @@ fun CalendarView(
     onDayClick: (LocalDate) -> Unit = {},
     theme: CalendarTheme = calendarDefaultTheme,
     expandable: Boolean = false,
+    showHeader: Boolean = true,
     calendarHeight: Dp = 320.dp,
     calendarSwipeDirection: CalendarSwipeDirection = CalendarSwipeDirection.Horizontal,
     calendarSelection: CalendarSelection = CalendarSelection.None,
+    onMonthChanged: ((YearMonth) -> Unit)? = null,
     onDatesSelected: ((List<LocalDate>) -> Unit)? = null,
+    onDateRender: ((LocalDate) -> DayTheme?)? = null,
     weekdaysType: WeekdaysType = WeekdaysType.Static,
     locale: Locale = LocalContext.current.resources.configuration.locales[0],
 ) {
-    var selectedDates by remember { mutableStateOf(listOf<LocalDate>()) }
-    var calendarExpanded by remember { mutableStateOf(true) }
-
     val lazyPagingItems = viewModel.dates.collectAsLazyPagingItems(Dispatchers.IO)
     val pagerState = rememberPagerState { lazyPagingItems.itemCount }
-
     val itemWidth = LocalConfiguration.current.screenWidthDp / DayOfWeek.entries.size
+    var selectedDates by remember { mutableStateOf(listOf<LocalDate>()) }
+    var calendarExpanded by remember { mutableStateOf(true) }
+    var currentMonth by remember { mutableStateOf(YearMonth.now()) }
 
     val onDayClickCallback: (LocalDate) -> Unit = { clickedDate ->
         when (calendarSelection) {
@@ -101,44 +105,41 @@ fun CalendarView(
                 .animateContentSize()
                 .background(theme.backgroundColor),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier =
-                Modifier
-                    .padding(bottom = 10.dp)
-                    .fillMaxWidth()
-                    .background(theme.headerBackgroundColor),
-        ) {
-            Spacer(Modifier.weight(1f))
+        if (showHeader) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier =
+                    Modifier
+                        .padding(bottom = 10.dp)
+                        .fillMaxWidth()
+                        .background(theme.headerBackgroundColor),
+            ) {
+                Spacer(Modifier.weight(1f))
 
-            val selectedMonth =
-                lazyPagingItems.takeIf { it.itemCount > 0 }
-                    ?.get(pagerState.currentPage)?.yearMonth
-                    ?: YearMonth.now()
+                Text(
+                    currentMonth.month.getDisplayName(
+                        TextStyle.FULL_STANDALONE,
+                        locale,
+                    ) + " " + currentMonth.year,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = theme.headerTextColor,
+                )
 
-            Text(
-                selectedMonth.month.getDisplayName(
-                    TextStyle.FULL_STANDALONE,
-                    locale,
-                ) + " " + selectedMonth.year,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = theme.headerTextColor,
-            )
+                Spacer(Modifier.weight(1f))
 
-            Spacer(Modifier.weight(1f))
-
-            // TODO: Add impl. Currently not working
-            if (expandable) {
-                IconToggleButton(
-                    checked = calendarExpanded,
-                    onCheckedChange = { calendarExpanded = it },
-                ) {
-                    Icon(
-                        if (calendarExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        "Toggle button",
-                        tint = theme.headerTextColor,
-                    )
+                // TODO: Add impl. Currently not working
+                if (expandable) {
+                    IconToggleButton(
+                        checked = calendarExpanded,
+                        onCheckedChange = { calendarExpanded = it },
+                    ) {
+                        Icon(
+                            if (calendarExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            "Toggle button",
+                            tint = theme.headerTextColor,
+                        )
+                    }
                 }
             }
         }
@@ -170,11 +171,47 @@ fun CalendarView(
         }
 
         if (calendarSwipeDirection == CalendarSwipeDirection.Horizontal) {
+            HorizontalPager(
+                state = pagerState,
+                key = lazyPagingItems.itemKey { it },
+            ) { currentPage ->
+                LaunchedEffect(key1 = pagerState.currentPage) {
+                    lazyPagingItems.takeIf { it.itemCount > 0 }
+                        ?.get(pagerState.currentPage)?.yearMonth?.takeIf { it != currentMonth }?.let {
+                            currentMonth = it
+
+                            onMonthChanged?.invoke(currentMonth)
+                        }
+                }
+
+                CalendarFlowRow(
+                    lazyPagingItems = lazyPagingItems,
+                    calendarExpanded = calendarExpanded,
+                    calendarHeight = calendarHeight,
+                    currentPage = currentPage,
+                    theme = theme,
+                    selectedDates = selectedDates,
+                    onDayClick = onDayClickCallback,
+                    weekdaysType = weekdaysType,
+                    locale = locale,
+                    onDateRender = onDateRender,
+                )
+            }
+        } else {
             VerticalPager(
                 modifier = Modifier.height(calendarHeight),
                 state = pagerState,
                 key = lazyPagingItems.itemKey { it },
             ) { currentPage ->
+                LaunchedEffect(key1 = pagerState.currentPage) {
+                    lazyPagingItems.takeIf { it.itemCount > 0 }
+                        ?.get(pagerState.currentPage)?.yearMonth?.takeIf { it != currentMonth }?.let {
+                            currentMonth = it
+
+                            onMonthChanged?.invoke(currentMonth)
+                        }
+                }
+
                 CalendarFlowRow(
                     lazyPagingItems = lazyPagingItems,
                     calendarExpanded = calendarExpanded,
@@ -185,23 +222,7 @@ fun CalendarView(
                     onDayClick = onDayClickCallback,
                     weekdaysType = weekdaysType,
                     locale = locale,
-                )
-            }
-        } else {
-            HorizontalPager(
-                state = pagerState,
-                key = lazyPagingItems.itemKey { it },
-            ) { currentPage ->
-                CalendarFlowRow(
-                    lazyPagingItems = lazyPagingItems,
-                    calendarExpanded = calendarExpanded,
-                    calendarHeight = calendarHeight,
-                    currentPage = currentPage,
-                    theme = theme,
-                    selectedDates = selectedDates,
-                    onDayClick = onDayClickCallback,
-                    weekdaysType = weekdaysType,
-                    locale = locale,
+                    onDateRender = onDateRender,
                 )
             }
         }

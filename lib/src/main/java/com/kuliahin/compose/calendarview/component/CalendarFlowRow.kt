@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.kuliahin.compose.calendarview.data.CalendarTheme
+import com.kuliahin.compose.calendarview.data.DayTheme
 import com.kuliahin.compose.calendarview.data.WeekdaysType
 import com.kuliahin.compose.calendarview.paging.MonthDates
 import java.time.DayOfWeek
@@ -33,6 +34,7 @@ fun CalendarFlowRow(
     onDayClick: (LocalDate) -> Unit,
     weekdaysType: WeekdaysType,
     locale: Locale,
+    onDateRender: ((LocalDate) -> DayTheme?)? = null,
 ) {
     val itemWidth = LocalConfiguration.current.screenWidthDp / DayOfWeek.entries.size
 
@@ -82,6 +84,7 @@ fun CalendarFlowRow(
                         weekdayLabel = weekdaysType == WeekdaysType.Dynamic && index < DayOfWeek.entries.size,
                         modifier = dayViewModifier,
                         locale = locale,
+                        onDateRender = onDateRender,
                     )
                 }
             }

@@ -5,10 +5,6 @@ The repository hosts the open-source code of Android Compose Calendar library.
 [![Lint](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml/badge.svg)](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml)
 [![GitHub release](https://img.shields.io/github/release/AndrewKuliahin96/compose-calendar-view.svg?maxAge=10)](https://github.com/AndrewKuliahin96/compose-calendar-view/releases)
 
-<div>
-  <img align="right" width="40%" src="pics/example_screenshot.webp" alt="">
-</div>
-
 ### Features
 
 * 🌈 Customizable theme
@@ -17,7 +13,7 @@ The repository hosts the open-source code of Android Compose Calendar library.
 * 🎲 Single/multiple dates selection
 * ⚡️ Static/dynamic weekdays
 * 🈯️ Customizable locale
-* 💠 Customizable dates shape
+* 💠 Condition-based dates customization
 * 📈 Single line mode - **Work in progress**
 * 🌓 Dark mode - **Work in progress**
 * 🎆 Calendar events - **Work in progress**
@@ -32,15 +28,22 @@ The repository hosts the open-source code of Android Compose Calendar library.
 Our [change log][changelog] has release history.
 
 The latest release is available
-on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.1/jar).
+on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.2/jar).
 
 ```kotlin
-implementation("com.kuliahin:compose.calendar-view:0.0.1")
+implementation("com.kuliahin:compose.calendar-view:0.0.2")
 ```
 
 ### Docs and Guides
 
 Coming soon
+
+### Examples
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="pics/example_screenshot.webp" width="48%" alt="Example Screenshot">
+  <img src="pics/example_customization.webp" width="48%" alt="Example Customization">
+</div>
 
 License
 -------

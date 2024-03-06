@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kuliahin.compose.calendarview.data.CalendarTheme
+import com.kuliahin.compose.calendarview.data.DayTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -33,6 +34,7 @@ fun DayView(
     isSelected: Boolean = false,
     weekdayLabel: Boolean = true,
     locale: Locale = LocalContext.current.resources.configuration.locales[0],
+    onDateRender: ((LocalDate) -> DayTheme?)? = null,
 ) {
     val isCurrentDay = date == LocalDate.now()
 
@@ -43,7 +45,13 @@ fun DayView(
             else -> theme.dayBackgroundColor
         }
 
-    val dayValueModifier = modifier.background(backgroundColor, shape = theme.dayShape)
+    val dayTheme = onDateRender?.invoke(date)
+
+    val dayValueModifier =
+        modifier.background(
+            dayTheme?.dayBackgroundColor ?: backgroundColor,
+            shape = dayTheme?.dayShape ?: theme.dayShape,
+        )
     val maxHeight = if (weekdayLabel) 50 + 20 else 50
 
     Column(
@@ -69,12 +77,16 @@ fun DayView(
                 .clickable { onDayClick(date) },
             contentAlignment = Alignment.Center,
         ) {
+            val dayValueColor =
+                dayTheme?.dayValueTextColor
+                    ?: if (isSelected || isCurrentDay) theme.selectedDayValueTextColor else theme.dayValueTextColor
+
             Text(
                 date.dayOfMonth.toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
-                color = if (isSelected || isCurrentDay) theme.selectedDayValueTextColor else theme.dayValueTextColor,
+                color = dayValueColor,
             )
         }
     }
