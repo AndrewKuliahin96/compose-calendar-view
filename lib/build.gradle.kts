@@ -9,7 +9,7 @@ plugins {
 
 description = "Android Compose Calendar View"
 group = "com.kuliahin"
-version = System.getenv("RELEASE_VERSION")
+version = System.getenv("RELEASE_VERSION") ?: "0.0.1"
 
 android {
     defaultConfig {
@@ -76,6 +76,8 @@ dependencies {
 }
 
 centralPortal {
+    name = "compose.calendar-view"
+
     username = System.getenv("CENTRAL_USERNAME")
     password = System.getenv("CENTRAL_TOKEN")
 
