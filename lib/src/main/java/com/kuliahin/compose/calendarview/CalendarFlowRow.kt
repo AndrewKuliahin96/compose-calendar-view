@@ -1,4 +1,4 @@
-package com.kuliahin.compose.calendarview.component
+package com.kuliahin.compose.calendarview
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -15,18 +15,34 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.kuliahin.compose.calendarview.data.CalendarTheme
+import com.kuliahin.compose.calendarview.data.CalendarType
 import com.kuliahin.compose.calendarview.data.DayTheme
+import com.kuliahin.compose.calendarview.data.Horizontal
 import com.kuliahin.compose.calendarview.data.WeekdaysType
 import com.kuliahin.compose.calendarview.paging.MonthDates
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.Locale
 
+/**
+ * Class represents single Calendar row.
+ *
+ * @param lazyPagingItems - paging data with month and dates.
+ * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleline] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
+ * @param calendarHeight - set height of the Calendar.
+ * @param currentPage - provide currentPage field from Pager.
+ * @param theme - Calendar customization theme.
+ * @param selectedDates - list of dates to select.
+ * @param onDayClick - day click callback.
+ * @param weekdaysType - day click callback.
+ * @param locale - to render weekday labels.
+ * @param onDateRender - callback for conditional [DayView] customization. See [DayTheme].
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CalendarFlowRow(
     lazyPagingItems: LazyPagingItems<MonthDates>,
-    calendarExpanded: Boolean,
+    calendarType: CalendarType = Horizontal.MonthMultiline,
     calendarHeight: Dp,
     currentPage: Int,
     theme: CalendarTheme,
@@ -50,9 +66,9 @@ fun CalendarFlowRow(
                     val currentMonth = dates.yearMonth
                     val dayViewModifier =
                         Modifier.alpha(
-                            if (!calendarExpanded && date.isBefore(LocalDate.now()) ||
+                            if (calendarType is Horizontal.WeekSingleline && date.isBefore(LocalDate.now()) ||
                                 date.isAfter(currentMonth.atEndOfMonth()) ||
-                                (calendarExpanded && date.isBefore(currentMonth.atDay(1)))
+                                (calendarType !is Horizontal.WeekSingleline && date.isBefore(currentMonth.atDay(1)))
                             ) {
                                 0.5f
                             } else {

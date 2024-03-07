@@ -16,11 +16,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,13 +34,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.kuliahin.compose.calendarview.component.CalendarFlowRow
 import com.kuliahin.compose.calendarview.data.CalendarSelection
-import com.kuliahin.compose.calendarview.data.CalendarSwipeDirection
 import com.kuliahin.compose.calendarview.data.CalendarTheme
+import com.kuliahin.compose.calendarview.data.CalendarType
 import com.kuliahin.compose.calendarview.data.DayTheme
+import com.kuliahin.compose.calendarview.data.Horizontal
 import com.kuliahin.compose.calendarview.data.WeekdaysType
-import com.kuliahin.compose.calendarview.data.calendarDefaultTheme
 import kotlinx.coroutines.Dispatchers
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -53,17 +47,33 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
+/**
+ * Class represents Calendar View.
+ *
+ * @param modifier - customize calendar background.
+ * @param viewModel - [CalendarViewModel] or extended class to produce paging of dates.
+ * @param onDayClick - day click callback.
+ * @param theme - see [CalendarTheme] to customize day view. [CalendarTheme.DEFAULT] by default.
+ * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleline] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
+ * @param showHeader - set this value to false to hide calendar header with month name.
+ * @param calendarHeight - set height of the Calendar.
+ * @param calendarSelection - can be [CalendarSelection.None], [CalendarSelection.Single] or [CalendarSelection.Range].
+ * @param onMonthChanged - current month callback.
+ * @param onDatesSelected - returns list of selected days.
+ * @param onDateRender - callback for conditional [DayView] customization. See [DayTheme].
+ * @param weekdaysType - day click callback.
+ * @param locale - to render weekday labels.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarView(
     modifier: Modifier = Modifier,
     viewModel: CalendarViewModel = viewModel(),
     onDayClick: (LocalDate) -> Unit = {},
-    theme: CalendarTheme = calendarDefaultTheme,
-    expandable: Boolean = false,
+    theme: CalendarTheme = CalendarTheme.DEFAULT,
+    calendarType: CalendarType = Horizontal.MonthMultiline,
     showHeader: Boolean = true,
     calendarHeight: Dp = 320.dp,
-    calendarSwipeDirection: CalendarSwipeDirection = CalendarSwipeDirection.Horizontal,
     calendarSelection: CalendarSelection = CalendarSelection.None,
     onMonthChanged: ((YearMonth) -> Unit)? = null,
     onDatesSelected: ((List<LocalDate>) -> Unit)? = null,
@@ -75,7 +85,6 @@ fun CalendarView(
     val pagerState = rememberPagerState { lazyPagingItems.itemCount }
     val itemWidth = LocalConfiguration.current.screenWidthDp / DayOfWeek.entries.size
     var selectedDates by remember { mutableStateOf(listOf<LocalDate>()) }
-    var calendarExpanded by remember { mutableStateOf(true) }
     var currentMonth by remember { mutableStateOf(YearMonth.now()) }
 
     val onDayClickCallback: (LocalDate) -> Unit = { clickedDate ->
@@ -127,20 +136,6 @@ fun CalendarView(
                 )
 
                 Spacer(Modifier.weight(1f))
-
-                // TODO: Add impl. Currently not working
-                if (expandable) {
-                    IconToggleButton(
-                        checked = calendarExpanded,
-                        onCheckedChange = { calendarExpanded = it },
-                    ) {
-                        Icon(
-                            if (calendarExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                            "Toggle button",
-                            tint = theme.headerTextColor,
-                        )
-                    }
-                }
             }
         }
 
@@ -170,7 +165,7 @@ fun CalendarView(
             }
         }
 
-        if (calendarSwipeDirection == CalendarSwipeDirection.Horizontal) {
+        if (calendarType is Horizontal) {
             HorizontalPager(
                 state = pagerState,
                 key = lazyPagingItems.itemKey { it },
@@ -186,7 +181,7 @@ fun CalendarView(
 
                 CalendarFlowRow(
                     lazyPagingItems = lazyPagingItems,
-                    calendarExpanded = calendarExpanded,
+                    calendarType = calendarType,
                     calendarHeight = calendarHeight,
                     currentPage = currentPage,
                     theme = theme,
@@ -214,7 +209,7 @@ fun CalendarView(
 
                 CalendarFlowRow(
                     lazyPagingItems = lazyPagingItems,
-                    calendarExpanded = calendarExpanded,
+                    calendarType = calendarType,
                     calendarHeight = calendarHeight,
                     currentPage = currentPage,
                     theme = theme,

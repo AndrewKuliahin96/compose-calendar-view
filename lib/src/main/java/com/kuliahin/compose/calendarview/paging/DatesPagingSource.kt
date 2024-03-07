@@ -8,7 +8,10 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.math.max
 
-class DatesPagingSource : PagingSource<YearMonth, MonthDates>() {
+/**
+ * PagingSource for generating Calendar view dates.
+ */
+internal class DatesPagingSource : PagingSource<YearMonth, MonthDates>() {
     override fun getRefreshKey(state: PagingState<YearMonth, MonthDates>): YearMonth? {
         return null
     }
@@ -50,5 +53,11 @@ class DatesPagingSource : PagingSource<YearMonth, MonthDates>() {
     }
 }
 
+/**
+ * Data for Calendar view paging.
+ *
+ * @param yearMonth - represents month page.
+ * @param dates - list of [LocalDate] dates for calendar view.
+ */
 @Parcelize
 data class MonthDates(val yearMonth: YearMonth, val dates: List<LocalDate>) : Parcelable

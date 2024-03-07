@@ -7,6 +7,9 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 
+/**
+ * Class represents possible calendar view customization.
+ */
 data class CalendarTheme(
     val backgroundColor: Color,
     val headerBackgroundColor: Color,
@@ -17,20 +20,25 @@ data class CalendarTheme(
     val headerTextColor: Color,
     val weekdaysTextColor: Color,
     val dayShape: Shape,
-)
-
-val calendarDefaultTheme: CalendarTheme
-    @Composable
-    @ReadOnlyComposable
-    get() =
-        CalendarTheme(
-            backgroundColor = Color.Transparent,
-            headerBackgroundColor = Color.Transparent,
-            dayBackgroundColor = Color.Transparent,
-            selectedDayBackgroundColor = MaterialTheme.colorScheme.primary,
-            dayValueTextColor = MaterialTheme.colorScheme.onBackground,
-            selectedDayValueTextColor = MaterialTheme.colorScheme.onBackground,
-            headerTextColor = MaterialTheme.colorScheme.onBackground,
-            weekdaysTextColor = MaterialTheme.colorScheme.onBackground,
-            dayShape = CircleShape,
-        )
+) {
+    companion object {
+        /**
+         * Default calendar view customization.
+         */
+        val DEFAULT: CalendarTheme
+            @Composable
+            @ReadOnlyComposable
+            get() =
+                CalendarTheme(
+                    backgroundColor = Color.Transparent,
+                    headerBackgroundColor = Color.Transparent,
+                    dayBackgroundColor = Color.Transparent,
+                    selectedDayBackgroundColor = MaterialTheme.colorScheme.primary,
+                    dayValueTextColor = MaterialTheme.colorScheme.onBackground,
+                    selectedDayValueTextColor = MaterialTheme.colorScheme.onBackground,
+                    headerTextColor = MaterialTheme.colorScheme.onBackground,
+                    weekdaysTextColor = MaterialTheme.colorScheme.onBackground,
+                    dayShape = CircleShape,
+                )
+    }
+}

@@ -4,6 +4,7 @@ The repository hosts the open-source code of Android Compose Calendar library.
 
 [![Lint](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml/badge.svg)](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml)
 [![GitHub release](https://img.shields.io/github/release/AndrewKuliahin96/compose-calendar-view.svg?maxAge=10)](https://github.com/AndrewKuliahin96/compose-calendar-view/releases)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 ### Features
 
@@ -28,10 +29,10 @@ The repository hosts the open-source code of Android Compose Calendar library.
 Our [change log][changelog] has release history.
 
 The latest release is available
-on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.2/jar).
+on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.3/jar).
 
 ```kotlin
-implementation("com.kuliahin:compose.calendar-view:0.0.2")
+implementation("com.kuliahin:compose.calendar-view:0.0.3")
 ```
 
 ### Docs and Guides
@@ -59,3 +60,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ```
 
 [changelog]: https://github.com/AndrewKuliahin96/compose-calendar-view/releases
+
+### Support me
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/andrewkuliahin)

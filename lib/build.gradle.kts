@@ -15,7 +15,7 @@ android {
     defaultConfig {
         namespace = "com.kuliahin.compose.calendarview"
         compileSdk = 34
-        minSdk = 26 // TODO: Downgrade to 23
+        minSdk = 26
     }
 
     buildTypes {
@@ -58,21 +58,14 @@ dependencies {
     // Paging
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-    implementation(libs.androidx.paging.common.android)
 
     // Compose
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.compose)
-
-    // Core and UI
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.lifecycle.compose)
 }
 
 centralPortal {

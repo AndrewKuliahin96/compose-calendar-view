@@ -1,4 +1,4 @@
-package com.kuliahin.compose.calendarview.component
+package com.kuliahin.compose.calendarview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +25,18 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
+/**
+ * Class represents single date in Calendar.
+ *
+ * @param date - date to process.
+ * @param onDayClick - day click callback.
+ * @param theme - see [CalendarTheme] to customize day view.
+ * @param modifier - modifier for background [Box].
+ * @param isSelected - set to make date selected.
+ * @param weekdayLabel - set to true to show first weekday labels.
+ * @param locale - [Locale] to render weekday labels.
+ * @param onDateRender - callback for conditional [DayView] customization. See [DayTheme].
+ */
 @Composable
 fun DayView(
     date: LocalDate,

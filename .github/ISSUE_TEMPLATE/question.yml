@@ -1,0 +1,28 @@
+name: 💭 Question
+description: Ask a Question about this library
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: textarea
+    attributes:
+      label: Question
+      description: Ask a question about the library or ask for help/advice. Make sure to be as detailed as possible, since well written questions are more likely to be picked up than badly written ones.
+      placeholder: How do I customize specific date view?
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Compose Calendar View Version
+      description: Which version of compose-calendar-view are you using?
+      placeholder: "ex. 0.0.3"
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Additional information
+      description: Please check all the boxes that apply
+      options:
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/CODE_OF_CONDUCT.md)
+          required: true
+        - label: I searched for similar questions [in the issues page](https://github.com/AndrewKuliahin96/compose-calendar-view/issues?q=is%3Aopen+is%3Aissue+label%3A%22question%22+) and found none.
+          required: true
