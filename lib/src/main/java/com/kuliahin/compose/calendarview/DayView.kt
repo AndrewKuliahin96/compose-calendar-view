@@ -52,12 +52,12 @@ fun DayView(
 
     val backgroundColor =
         when {
-            isCurrentDay -> theme.selectedDayBackgroundColor.copy(alpha = 0.5f)
+            isCurrentDay && !isSelected -> theme.selectedDayBackgroundColor.copy(alpha = 0.5f)
             isSelected -> theme.selectedDayBackgroundColor
             else -> theme.dayBackgroundColor
         }
 
-    val dayTheme = onDateRender?.invoke(date)
+    val dayTheme = if (!isSelected) onDateRender?.invoke(date) else null
 
     val dayValueModifier =
         modifier.background(

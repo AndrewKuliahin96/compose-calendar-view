@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.kuliahin.compose.calendarview.data.CalendarSelection
 import com.kuliahin.compose.calendarview.data.CalendarTheme
 import com.kuliahin.compose.calendarview.data.CalendarType
 import com.kuliahin.compose.calendarview.data.DayTheme
@@ -28,11 +29,12 @@ import java.util.Locale
  * Class represents single Calendar row.
  *
  * @param lazyPagingItems - paging data with month and dates.
- * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleline] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
+ * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleLine] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
  * @param calendarHeight - set height of the Calendar.
  * @param currentPage - provide currentPage field from Pager.
  * @param theme - Calendar customization theme.
  * @param selectedDates - list of dates to select.
+ * @param calendarSelection - set of selected dates.
  * @param onDayClick - day click callback.
  * @param weekdaysType - day click callback.
  * @param locale - to render weekday labels.
@@ -42,11 +44,12 @@ import java.util.Locale
 @Composable
 fun CalendarFlowRow(
     lazyPagingItems: LazyPagingItems<MonthDates>,
-    calendarType: CalendarType = Horizontal.MonthMultiline,
+    calendarType: CalendarType,
     calendarHeight: Dp,
     currentPage: Int,
     theme: CalendarTheme,
-    selectedDates: List<LocalDate>,
+    selectedDates: Set<LocalDate>,
+    calendarSelection: CalendarSelection,
     onDayClick: (LocalDate) -> Unit,
     weekdaysType: WeekdaysType,
     locale: Locale,
@@ -64,33 +67,40 @@ fun CalendarFlowRow(
                     contentAlignment = Alignment.Center,
                 ) {
                     val currentMonth = dates.yearMonth
+
+                    val isSelected =
+                        when (calendarSelection) {
+                            is CalendarSelection.None -> false
+                            is CalendarSelection.Single,
+                            is CalendarSelection.Multiple,
+                            -> selectedDates.contains(date)
+                            is CalendarSelection.Range ->
+                                when (selectedDates.size) {
+                                    1 -> selectedDates.contains(date)
+                                    2 -> {
+                                        val date1 = selectedDates.first()
+                                        val date2 = selectedDates.last()
+
+                                        val startDate = if (date1.isBefore(date2)) date1 else date2
+                                        val endDate = if (date1.isBefore(date2)) date2 else date1
+
+                                        !date.isBefore(startDate) && !date.isAfter(endDate)
+                                    }
+                                    else -> false
+                                }
+                        }
+
                     val dayViewModifier =
                         Modifier.alpha(
-                            if (calendarType is Horizontal.WeekSingleline && date.isBefore(LocalDate.now()) ||
+                            if (!isSelected && calendarType is Horizontal.WeekSingleLine && date.isBefore(LocalDate.now()) ||
                                 date.isAfter(currentMonth.atEndOfMonth()) ||
-                                (calendarType !is Horizontal.WeekSingleline && date.isBefore(currentMonth.atDay(1)))
+                                (calendarType !is Horizontal.WeekSingleLine && date.isBefore(currentMonth.atDay(1)))
                             ) {
                                 0.5f
                             } else {
                                 1f
                             },
                         )
-
-                    val isSelected =
-                        when (selectedDates.size) {
-                            1 -> date == selectedDates[0]
-                            2 -> {
-                                val date1 = selectedDates[0]
-                                val date2 = selectedDates[1]
-
-                                val startDate = if (date1.isBefore(date2)) date1 else date2
-                                val endDate = if (date1.isBefore(date2)) date2 else date1
-
-                                !date.isBefore(startDate) && !date.isAfter(endDate)
-                            }
-
-                            else -> false
-                        }
 
                     DayView(
                         date,

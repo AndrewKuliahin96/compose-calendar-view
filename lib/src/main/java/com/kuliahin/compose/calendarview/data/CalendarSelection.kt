@@ -1,5 +1,8 @@
 package com.kuliahin.compose.calendarview.data
 
+import java.time.LocalDate
+import java.util.SortedSet
+
 /**
  * Class represents possible types of calendar selection.
  *
@@ -10,7 +13,14 @@ package com.kuliahin.compose.calendarview.data
 sealed class CalendarSelection {
     data object None : CalendarSelection()
 
-    data object Single : CalendarSelection()
+    class Single(
+        val allowUnselect: Boolean = true,
+        val onDateSelected: (selectedDate: LocalDate) -> Unit = {},
+    ) : CalendarSelection()
 
-    data object Range : CalendarSelection()
+    class Multiple(val onDatesSelected: (selectedDates: SortedSet<LocalDate>) -> Unit = {}) :
+        CalendarSelection()
+
+    class Range(val onRangeSelected: (selectedDates: SortedSet<LocalDate>) -> Unit = {}) :
+        CalendarSelection()
 }

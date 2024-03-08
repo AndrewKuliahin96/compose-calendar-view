@@ -1,19 +1,22 @@
 package com.kuliahin.compose.calendarview.data
 
+import java.time.LocalDate
+import java.time.YearMonth
+
 /**
  * Class represents possible types of calendar.
  *
  * [Horizontal] - calendar can scroll only horizontally.
- * Can have month (multiline) [Horizontal.WeekSingleline] or week [Horizontal.WeekSingleline] (single line) representation.
+ * Can have month (multiline) [Horizontal.WeekSingleLine] or week [Horizontal.WeekSingleLine] (single line) representation.
  *
  * [MonthMultilineVertical] - calendar can scroll only horizontally and have month representation.
  */
 sealed class CalendarType
 
 sealed class Horizontal : CalendarType() {
-    data object MonthMultiline : Horizontal()
+    class MonthMultiline(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : Horizontal()
 
-    data object WeekSingleline : Horizontal()
+    class WeekSingleLine(val onWeekChanged: (weekStartDay: LocalDate) -> Unit) : Horizontal()
 }
 
-data object MonthMultilineVertical : CalendarType()
+class MonthMultilineVertical(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : CalendarType()
