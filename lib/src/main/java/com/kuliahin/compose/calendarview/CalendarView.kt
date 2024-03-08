@@ -54,12 +54,11 @@ import java.util.Locale
  * @param viewModel - [CalendarViewModel] or extended class to produce paging of dates.
  * @param onDayClick - day click callback.
  * @param theme - see [CalendarTheme] to customize day view. [CalendarTheme.DEFAULT] by default.
- * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleline] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
+ * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleLine] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
  * @param showHeader - set this value to false to hide calendar header with month name.
  * @param calendarHeight - set height of the Calendar.
  * @param calendarSelection - can be [CalendarSelection.None], [CalendarSelection.Single] or [CalendarSelection.Range].
  * @param onMonthChanged - current month callback.
- * @param onDatesSelected - returns list of selected days.
  * @param onDateRender - callback for conditional [DayView] customization. See [DayTheme].
  * @param weekdaysType - day click callback.
  * @param locale - to render weekday labels.
@@ -76,7 +75,6 @@ fun CalendarView(
     calendarHeight: Dp = 320.dp,
     calendarSelection: CalendarSelection = CalendarSelection.None,
     onMonthChanged: ((YearMonth) -> Unit)? = null,
-    onDatesSelected: ((List<LocalDate>) -> Unit)? = null,
     onDateRender: ((LocalDate) -> DayTheme?)? = null,
     weekdaysType: WeekdaysType = WeekdaysType.Static,
     locale: Locale = LocalContext.current.resources.configuration.locales[0],
@@ -89,19 +87,24 @@ fun CalendarView(
 
     val onDayClickCallback: (LocalDate) -> Unit = { clickedDate ->
         when (calendarSelection) {
-            CalendarSelection.Single -> listOf(clickedDate)
-            CalendarSelection.Range ->
-                if (selectedDates.size == 1) {
-                    selectedDates + clickedDate
+            is CalendarSelection.Single -> {
+                calendarSelection.onDateSelected(clickedDate)
+
+                selectedDates = listOf(clickedDate)
+            }
+            is CalendarSelection.Range -> {
+                val dates = if (selectedDates.size == 1) {
+                    (selectedDates + clickedDate).sortedBy { it.dayOfYear }
                 } else {
                     listOf(clickedDate)
                 }
 
-            else -> null
-        }?.let { dates ->
-            selectedDates = dates
+                calendarSelection.onRangeSelected(dates)
 
-            onDatesSelected?.invoke(dates)
+                selectedDates = dates
+            }
+
+            else -> Unit
         }
 
         onDayClick(clickedDate)

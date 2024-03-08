@@ -30,7 +30,9 @@ class MainActivity : AppCompatActivity() {
                     CalendarView(
                         modifier = Modifier.fillMaxSize(),
                         weekdaysType = WeekdaysType.Static,
-                        calendarSelection = CalendarSelection.Range,
+                        calendarSelection = CalendarSelection.Range { selectedDates ->
+                            Log.e("onDatesSelected", selectedDates.joinToString())
+                        },
                         locale = Locale.US,
                         onDateRender = {
                             val selectedColor = rainbowColors[it.dayOfMonth % rainbowColors.size]
@@ -50,9 +52,6 @@ class MainActivity : AppCompatActivity() {
                         },
                         onMonthChanged = { currentMonth ->
                             Log.e("onMonthChanged", currentMonth.toString())
-                        },
-                        onDatesSelected = { dates ->
-                            Log.e("onDatesSelected", dates.joinToString())
                         },
                     )
                 }

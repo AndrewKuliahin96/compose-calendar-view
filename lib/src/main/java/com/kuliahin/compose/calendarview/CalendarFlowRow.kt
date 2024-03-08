@@ -28,7 +28,7 @@ import java.util.Locale
  * Class represents single Calendar row.
  *
  * @param lazyPagingItems - paging data with month and dates.
- * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleline] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
+ * @param calendarType - can be [Horizontal.MonthMultiline], [Horizontal.WeekSingleLine] or [com.kuliahin.compose.calendarview.data.MonthMultilineVertical].
  * @param calendarHeight - set height of the Calendar.
  * @param currentPage - provide currentPage field from Pager.
  * @param theme - Calendar customization theme.
@@ -66,9 +66,9 @@ fun CalendarFlowRow(
                     val currentMonth = dates.yearMonth
                     val dayViewModifier =
                         Modifier.alpha(
-                            if (calendarType is Horizontal.WeekSingleline && date.isBefore(LocalDate.now()) ||
+                            if (calendarType is Horizontal.WeekSingleLine && date.isBefore(LocalDate.now()) ||
                                 date.isAfter(currentMonth.atEndOfMonth()) ||
-                                (calendarType !is Horizontal.WeekSingleline && date.isBefore(currentMonth.atDay(1)))
+                                (calendarType !is Horizontal.WeekSingleLine && date.isBefore(currentMonth.atDay(1)))
                             ) {
                                 0.5f
                             } else {
