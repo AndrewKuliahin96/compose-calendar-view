@@ -39,6 +39,7 @@ import com.kuliahin.compose.calendarview.data.CalendarTheme
 import com.kuliahin.compose.calendarview.data.CalendarType
 import com.kuliahin.compose.calendarview.data.DayTheme
 import com.kuliahin.compose.calendarview.data.Horizontal
+import com.kuliahin.compose.calendarview.data.MonthMultilineVertical
 import com.kuliahin.compose.calendarview.data.WeekdaysType
 import kotlinx.coroutines.Dispatchers
 import java.time.DayOfWeek
@@ -58,7 +59,6 @@ import java.util.Locale
  * @param showHeader - set this value to false to hide calendar header with month name.
  * @param calendarHeight - set height of the Calendar.
  * @param calendarSelection - can be [CalendarSelection.None], [CalendarSelection.Single] or [CalendarSelection.Range].
- * @param onMonthChanged - current month callback.
  * @param onDateRender - callback for conditional [DayView] customization. See [DayTheme].
  * @param weekdaysType - day click callback.
  * @param locale - to render weekday labels.
@@ -70,11 +70,10 @@ fun CalendarView(
     viewModel: CalendarViewModel = viewModel(),
     onDayClick: (LocalDate) -> Unit = {},
     theme: CalendarTheme = CalendarTheme.DEFAULT,
-    calendarType: CalendarType = Horizontal.MonthMultiline,
+    calendarType: CalendarType = Horizontal.MonthMultiline {},
     showHeader: Boolean = true,
     calendarHeight: Dp = 320.dp,
     calendarSelection: CalendarSelection = CalendarSelection.None,
-    onMonthChanged: ((YearMonth) -> Unit)? = null,
     onDateRender: ((LocalDate) -> DayTheme?)? = null,
     weekdaysType: WeekdaysType = WeekdaysType.Static,
     locale: Locale = LocalContext.current.resources.configuration.locales[0],
@@ -82,26 +81,42 @@ fun CalendarView(
     val lazyPagingItems = viewModel.dates.collectAsLazyPagingItems(Dispatchers.IO)
     val pagerState = rememberPagerState { lazyPagingItems.itemCount }
     val itemWidth = LocalConfiguration.current.screenWidthDp / DayOfWeek.entries.size
-    var selectedDates by remember { mutableStateOf(listOf<LocalDate>()) }
+    var selectedDates by remember { mutableStateOf(setOf<LocalDate>()) }
     var currentMonth by remember { mutableStateOf(YearMonth.now()) }
 
     val onDayClickCallback: (LocalDate) -> Unit = { clickedDate ->
         when (calendarSelection) {
             is CalendarSelection.Single -> {
+                selectedDates =
+                    if (selectedDates.contains(clickedDate) && calendarSelection.allowUnselect) {
+                        setOf()
+                    } else {
+                        setOf(clickedDate)
+                    }
+
                 calendarSelection.onDateSelected(clickedDate)
-
-                selectedDates = listOf(clickedDate)
             }
+
+            is CalendarSelection.Multiple -> {
+                selectedDates =
+                    if (selectedDates.contains(clickedDate)) {
+                        (selectedDates - clickedDate)
+                    } else {
+                        (selectedDates + clickedDate)
+                    }
+
+                calendarSelection.onDatesSelected(selectedDates.toSortedSet())
+            }
+
             is CalendarSelection.Range -> {
-                val dates = if (selectedDates.size == 1) {
-                    (selectedDates + clickedDate).sortedBy { it.dayOfYear }
-                } else {
-                    listOf(clickedDate)
-                }
+                selectedDates =
+                    if (selectedDates.size == 1) {
+                        (selectedDates + clickedDate)
+                    } else {
+                        setOf(clickedDate)
+                    }
 
-                calendarSelection.onRangeSelected(dates)
-
-                selectedDates = dates
+                calendarSelection.onRangeSelected(selectedDates.toSortedSet())
             }
 
             else -> Unit
@@ -174,12 +189,22 @@ fun CalendarView(
                 key = lazyPagingItems.itemKey { it },
             ) { currentPage ->
                 LaunchedEffect(key1 = pagerState.currentPage) {
-                    lazyPagingItems.takeIf { it.itemCount > 0 }
-                        ?.get(pagerState.currentPage)?.yearMonth?.takeIf { it != currentMonth }?.let {
-                            currentMonth = it
+                    val currentMonthDates =
+                        lazyPagingItems.takeIf { it.itemCount > 0 }
+                            ?.get(pagerState.currentPage)
 
-                            onMonthChanged?.invoke(currentMonth)
-                        }
+                    currentMonthDates?.yearMonth?.takeIf { it != currentMonth }?.let {
+                        currentMonth = it
+                    }
+
+                    when (calendarType) {
+                        is Horizontal.MonthMultiline -> calendarType.onMonthChanged(currentMonth)
+                        is Horizontal.WeekSingleLine ->
+                            currentMonthDates?.dates?.firstOrNull()
+                                ?.let {
+                                    calendarType.onWeekChanged(it)
+                                }
+                    }
                 }
 
                 CalendarFlowRow(
@@ -189,6 +214,7 @@ fun CalendarView(
                     currentPage = currentPage,
                     theme = theme,
                     selectedDates = selectedDates,
+                    calendarSelection = calendarSelection,
                     onDayClick = onDayClickCallback,
                     weekdaysType = weekdaysType,
                     locale = locale,
@@ -203,10 +229,13 @@ fun CalendarView(
             ) { currentPage ->
                 LaunchedEffect(key1 = pagerState.currentPage) {
                     lazyPagingItems.takeIf { it.itemCount > 0 }
-                        ?.get(pagerState.currentPage)?.yearMonth?.takeIf { it != currentMonth }?.let {
+                        ?.get(pagerState.currentPage)?.yearMonth?.takeIf { it != currentMonth }
+                        ?.let {
                             currentMonth = it
 
-                            onMonthChanged?.invoke(currentMonth)
+                            (calendarType as? MonthMultilineVertical)
+                                ?.onMonthChanged
+                                ?.invoke(currentMonth)
                         }
                 }
 
@@ -217,6 +246,7 @@ fun CalendarView(
                     currentPage = currentPage,
                     theme = theme,
                     selectedDates = selectedDates,
+                    calendarSelection = calendarSelection,
                     onDayClick = onDayClickCallback,
                     weekdaysType = weekdaysType,
                     locale = locale,

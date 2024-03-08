@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import com.kuliahin.compose.calendarview.CalendarView
 import com.kuliahin.compose.calendarview.data.CalendarSelection
 import com.kuliahin.compose.calendarview.data.DayTheme
+import com.kuliahin.compose.calendarview.data.Horizontal
 import com.kuliahin.compose.calendarview.data.WeekdaysType
 import java.util.Locale
 
@@ -30,9 +31,14 @@ class MainActivity : AppCompatActivity() {
                     CalendarView(
                         modifier = Modifier.fillMaxSize(),
                         weekdaysType = WeekdaysType.Static,
-                        calendarSelection = CalendarSelection.Range { selectedDates ->
-                            Log.e("onDatesSelected", selectedDates.joinToString())
-                        },
+                        calendarType =
+                            Horizontal.MonthMultiline { currentMonth ->
+                                Log.d("onMonthChanged", currentMonth.toString())
+                            },
+                        calendarSelection =
+                            CalendarSelection.Multiple { selectedDates ->
+                                Log.d("calendarSelection", selectedDates.joinToString())
+                            },
                         locale = Locale.US,
                         onDateRender = {
                             val selectedColor = rainbowColors[it.dayOfMonth % rainbowColors.size]
@@ -49,9 +55,6 @@ class MainActivity : AppCompatActivity() {
                                 valueTextColor,
                                 RoundedCornerShape(50 - it.dayOfMonth),
                             )
-                        },
-                        onMonthChanged = { currentMonth ->
-                            Log.e("onMonthChanged", currentMonth.toString())
                         },
                     )
                 }

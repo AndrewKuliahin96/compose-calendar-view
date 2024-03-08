@@ -1,5 +1,8 @@
 package com.kuliahin.compose.calendarview.data
 
+import java.time.LocalDate
+import java.time.YearMonth
+
 /**
  * Class represents possible types of calendar.
  *
@@ -11,9 +14,9 @@ package com.kuliahin.compose.calendarview.data
 sealed class CalendarType
 
 sealed class Horizontal : CalendarType() {
-    data object MonthMultiline : Horizontal()
+    class MonthMultiline(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : Horizontal()
 
-    data object WeekSingleLine : Horizontal()
+    class WeekSingleLine(val onWeekChanged: (weekStartDay: LocalDate) -> Unit) : Horizontal()
 }
 
-data object MonthMultilineVertical : CalendarType()
+class MonthMultilineVertical(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : CalendarType()

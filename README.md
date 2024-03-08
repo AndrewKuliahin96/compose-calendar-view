@@ -3,8 +3,9 @@
 The repository hosts the open-source code of Android Compose Calendar library.
 
 [![Lint](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml/badge.svg)](https://github.com/AndrewKuliahin96/compose-calendar-view/actions/workflows/lint.yml)
+![Maven Central](https://img.shields.io/maven-central/v/com.kuliahin:compose.calendar-view)
 [![GitHub release](https://img.shields.io/github/release/AndrewKuliahin96/compose-calendar-view.svg?maxAge=10)](https://github.com/AndrewKuliahin96/compose-calendar-view/releases)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+![Kotlin](https://kotlin-version.aws.icerock.dev/kotlin-version/kotlin-version?group=com.kuliahin&name=calendar-view)
 
 ### Features
 
