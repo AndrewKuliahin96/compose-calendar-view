@@ -5,20 +5,29 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.kuliahin.compose.calendarview.CalendarView
 import com.kuliahin.compose.calendarview.data.CalendarSelection
-import com.kuliahin.compose.calendarview.data.DayTheme
-import com.kuliahin.compose.calendarview.data.Horizontal
+import com.kuliahin.compose.calendarview.data.CalendarType
+import com.kuliahin.compose.calendarview.data.DateTheme
 import com.kuliahin.compose.calendarview.data.WeekdaysType
+import com.kuliahin.compose.calendarview.ui.CalendarView
+import java.time.LocalDate
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
-    private val rainbowColors = listOf(Color.Red, Color.Yellow, Color.Green, Color.Blue, Color.Cyan, Color.Magenta)
+    private val rainbowColors =
+        listOf(Color.Red, Color.Yellow, Color.Green, Color.Blue, Color.Cyan, Color.Magenta)
+
+    private val selectedDates =
+        setOf(
+            LocalDate.now().plusDays(4),
+            LocalDate.now().plusDays(6),
+            LocalDate.now().plusDays(7),
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +41,11 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.fillMaxSize(),
                         weekdaysType = WeekdaysType.Static,
                         calendarType =
-                            Horizontal.MonthMultiline { currentMonth ->
+                            CalendarType.Horizontal.MonthMultiline { currentMonth ->
                                 Log.d("onMonthChanged", currentMonth.toString())
                             },
                         calendarSelection =
-                            CalendarSelection.Multiple { selectedDates ->
+                            CalendarSelection.Multiple(selectedDates) { selectedDates ->
                                 Log.d("calendarSelection", selectedDates.joinToString())
                             },
                         locale = Locale.US,
@@ -50,10 +59,10 @@ class MainActivity : AppCompatActivity() {
                                     Color.Black
                                 }
 
-                            DayTheme(
-                                selectedColor.copy(alpha = 0.4F),
-                                valueTextColor,
-                                RoundedCornerShape(50 - it.dayOfMonth),
+                            DateTheme.DEFAULT.copy(
+                                selectedDateBackgroundColor = selectedColor.copy(alpha = 0.4F),
+                                selectedDateValueTextColor = valueTextColor,
+                                dateShape = CircleShape,
                             )
                         },
                     )

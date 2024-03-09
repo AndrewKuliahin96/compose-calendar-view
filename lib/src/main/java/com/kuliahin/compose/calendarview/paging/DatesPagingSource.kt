@@ -4,54 +4,59 @@ import android.os.Parcelable
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import kotlinx.parcelize.Parcelize
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.math.max
 
 /**
  * PagingSource for generating Calendar view dates.
  */
-internal class DatesPagingSource : PagingSource<YearMonth, MonthDates>() {
-    override fun getRefreshKey(state: PagingState<YearMonth, MonthDates>): YearMonth? {
-        return null
-    }
+open class DatesPagingSource(private val isMonthView: Boolean) :
+    PagingSource<DatesKey, MonthDates>() {
+    override fun getRefreshKey(state: PagingState<DatesKey, MonthDates>): DatesKey? = null
 
-    override suspend fun load(params: LoadParams<YearMonth>): LoadResult<YearMonth, MonthDates> {
+    override suspend fun load(params: LoadParams<DatesKey>): LoadResult<DatesKey, MonthDates> {
         try {
-            val key = params.key ?: YearMonth.now()
-            val dates = mutableListOf<LocalDate>()
-            val startOfMonth = key.atDay(1)
-            val prevMonthDays = startOfMonth.dayOfWeek.value - 1
+            val key =
+                params.key ?: DatesKey(YearMonth.now(), LocalDate.now().with(DayOfWeek.MONDAY))
 
-            for (i in 1..prevMonthDays) {
-                dates.add(startOfMonth.minusDays(i.toLong()))
-            }
+            val monthDates =
+                if (isMonthView) {
+                    val startOfMonth = key.yearMonth.atDay(1)
+                    val prevMonthDates = startOfMonth.dayOfWeek.value - 1
+                    val start = startOfMonth.minusDays(prevMonthDates.toLong())
+                    val dates = (0 until 42).map { start.plusDays(it.toLong()) }
 
-            dates.reverse()
+                    MonthDates(key.yearMonth, dates)
+                } else {
+                    val dates = (0 until 7).map { key.startOfWeekDate.plusDays(it.toLong()) }
 
-            val lengthOfMonth = key.lengthOfMonth()
+                    val yearMonth =
+                        dates.groupBy { YearMonth.from(it) }.maxByOrNull { it.value.size }?.key
+                            ?: key.yearMonth
 
-            for (i in 1..lengthOfMonth) {
-                dates.add(LocalDate.of(key.year, key.month, i))
-            }
-
-            val remainingDays = max(42 - dates.size, 0)
-            val nextMonthStart = key.plusMonths(1).atDay(1)
-
-            for (i in 0 until remainingDays) {
-                dates.add(nextMonthStart.plusDays(i.toLong()))
-            }
+                    MonthDates(yearMonth, dates)
+                }
 
             return LoadResult.Page(
-                data = listOf(MonthDates(key, dates)),
-                prevKey = key.minusMonths(1),
-                nextKey = key.plusMonths(1),
+                data = listOf(monthDates),
+                prevKey = DatesKey(key.yearMonth.minusMonths(1), key.startOfWeekDate.minusWeeks(1)),
+                nextKey = DatesKey(key.yearMonth.plusMonths(1), key.startOfWeekDate.plusWeeks(1)),
             )
         } catch (e: Exception) {
             return LoadResult.Error(e)
         }
     }
 }
+
+/**
+ * Data for Calendar view paging.
+ *
+ * @param yearMonth - represents month page.
+ * @param startOfWeekDate - list of [LocalDate] dates for calendar view.
+ */
+@Parcelize
+data class DatesKey(val yearMonth: YearMonth, val startOfWeekDate: LocalDate) : Parcelable
 
 /**
  * Data for Calendar view paging.

@@ -1,4 +1,4 @@
-package com.kuliahin.compose.calendarview
+package com.kuliahin.compose.calendarview.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
@@ -9,10 +9,9 @@ import com.kuliahin.compose.calendarview.paging.DatesPagingSource
  * Class represents vie model for Calendar view.
  */
 open class CalendarViewModel : ViewModel() {
-    open val dates by lazy {
+    open fun getDatesFlow(isMonthView: Boolean) =
         Pager(
-            config = PagingConfig(pageSize = 3, enablePlaceholders = false),
-            pagingSourceFactory = { DatesPagingSource() },
+            config = PagingConfig(initialLoadSize = 2, pageSize = 2, enablePlaceholders = false),
+            pagingSourceFactory = { DatesPagingSource(isMonthView) },
         ).flow
-    }
 }

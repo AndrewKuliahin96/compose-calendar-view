@@ -22,5 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Compose Calendar View"
 
-include(":app")
+include(":example")
 include(":lib")

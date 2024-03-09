@@ -10,17 +10,24 @@ import java.util.SortedSet
  * [Single] allow to select only one date.
  * [Range] allow to select range of dates.
  */
-sealed class CalendarSelection {
+sealed class CalendarSelection(val selectedDates: Set<LocalDate> = setOf()) {
     data object None : CalendarSelection()
 
     class Single(
+        selectedDate: LocalDate? = null,
         val allowUnselect: Boolean = true,
         val onDateSelected: (selectedDate: LocalDate) -> Unit = {},
-    ) : CalendarSelection()
+    ) : CalendarSelection(selectedDate?.let(::setOf)?.toSortedSet() ?: setOf())
 
-    class Multiple(val onDatesSelected: (selectedDates: SortedSet<LocalDate>) -> Unit = {}) :
-        CalendarSelection()
+    class Multiple(
+        selectedDates: Set<LocalDate> = setOf(),
+        val onDatesSelected: (
+            selectedDates: SortedSet<LocalDate>,
+        ) -> Unit = {},
+    ) : CalendarSelection(selectedDates.toSortedSet())
 
-    class Range(val onRangeSelected: (selectedDates: SortedSet<LocalDate>) -> Unit = {}) :
-        CalendarSelection()
+    class Range(
+        selectedDates: Set<LocalDate> = setOf(),
+        val onRangeSelected: (selectedDates: SortedSet<LocalDate>) -> Unit = {},
+    ) : CalendarSelection(selectedDates.toSortedSet())
 }

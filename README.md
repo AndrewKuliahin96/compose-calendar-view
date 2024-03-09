@@ -12,11 +12,11 @@ The repository hosts the open-source code of Android Compose Calendar library.
 * 🌈 Customizable theme
 * 📑 Based on Android Paging library
 * 🧭 Horizontal and Vertical swipe direction
-* 🎲 Single/multiple dates selection
+* 🎲 Single/multiple/range dates selection
 * ⚡️ Static/dynamic weekdays
 * 🈯️ Customizable locale
 * 💠 Condition-based dates customization
-* 📈 Single line mode - **Work in progress**
+* 📈 Month view/Week view (single line mode)
 * 🌓 Dark mode - **Work in progress**
 * 🎆 Calendar events - **Work in progress**
 
@@ -30,10 +30,10 @@ The repository hosts the open-source code of Android Compose Calendar library.
 Our [change log][changelog] has release history.
 
 The latest release is available
-on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.4/jar).
+on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.5/jar).
 
 ```kotlin
-implementation("com.kuliahin:compose.calendar-view:0.0.4")
+implementation("com.kuliahin:compose.calendar-view:0.0.5")
 ```
 
 ### Docs and Guides
