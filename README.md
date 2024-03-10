@@ -7,6 +7,11 @@ The repository hosts the open-source code of Android Compose Calendar library.
 [![GitHub release](https://img.shields.io/github/release/AndrewKuliahin96/compose-calendar-view.svg?maxAge=10)](https://github.com/AndrewKuliahin96/compose-calendar-view/releases)
 ![Kotlin](https://kotlin-version.aws.icerock.dev/kotlin-version?group=com.kuliahin&name=compose.calendar-view)
 
+<div style="display: flex; justify-content: space-between;">
+  <img src="pics/example_screenshot.webp" width="48%" alt="Example Screenshot">
+  <img src="pics/example_customization.webp" width="48%" alt="Example Customization">
+</div>
+
 ### Features
 
 * 🌈 Customizable theme
@@ -25,27 +30,26 @@ The repository hosts the open-source code of Android Compose Calendar library.
 * `compileSdk` API level 34
 * `minSdk` API level 26 or higher
 
-### Installation
+### Setup
 
 Our [change log][changelog] has release history.
 
 The latest release is available
-on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view/0.0.5/jar).
+on [Maven Central](https://search.maven.org/artifact/com.kuliahin/compose.calendar-view).
+
+Add library with desired release version to your `build.gradle`:
 
 ```kotlin
-implementation("com.kuliahin:compose.calendar-view:0.0.5")
+implementation("com.kuliahin:compose.calendar-view:$latestVersion")
 ```
 
-### Docs and Guides
+### Usage
 
-Coming soon
+You can find the relevant documentation for the library [here](docs/LIBRARY_USAGE.md).
 
-### Examples
+### Contributing
 
-<div style="display: flex; justify-content: space-between;">
-  <img src="pics/example_screenshot.webp" width="48%" alt="Example Screenshot">
-  <img src="pics/example_customization.webp" width="48%" alt="Example Customization">
-</div>
+Found a bug? feel free to fix it and send a pull request or  [open an issue](https://github.com/AndrewKuliahin96/compose-calendar-view/issues).
 
 License
 -------
