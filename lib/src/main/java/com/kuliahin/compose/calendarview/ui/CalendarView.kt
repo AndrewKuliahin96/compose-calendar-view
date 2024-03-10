@@ -51,6 +51,7 @@ import java.util.Locale
  * @param calendarType - can be [CalendarType.Horizontal.MonthMultiline], [CalendarType.Horizontal.WeekSingleLine] or [com.kuliahin.compose.calendarview.data.CalendarType.MonthMultilineVertical].
  * @param showHeader - set this value to false to hide calendar header with month name.
  * @param userScrollEnabled - set this value to false to prevent user scroll.
+ * @param reverseLayout reverse the direction of scrolling and layout.
  * @param calendarSelection - can be [CalendarSelection.None], [CalendarSelection.Single] or [CalendarSelection.Range].
  * @param onDateRender - callback for conditional date customization. See [DateTheme].
  * @param weekdaysType - day click callback.
@@ -66,6 +67,7 @@ fun CalendarView(
     calendarType: CalendarType = CalendarType.Horizontal.MonthMultiline {},
     showHeader: Boolean = true,
     userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
     calendarSelection: CalendarSelection = CalendarSelection.None,
     onDateRender: (@Composable (LocalDate) -> DateTheme?)? = null,
     weekdaysType: WeekdaysType = WeekdaysType.Static,
@@ -202,6 +204,7 @@ fun CalendarView(
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = userScrollEnabled,
+                reverseLayout = reverseLayout,
                 key = lazyPagingItems.itemKey { it },
                 pageContent = pageContent,
             )
@@ -209,6 +212,7 @@ fun CalendarView(
             VerticalPager(
                 state = pagerState,
                 userScrollEnabled = userScrollEnabled,
+                reverseLayout = reverseLayout,
                 key = lazyPagingItems.itemKey { it },
                 pageContent = pageContent,
             )

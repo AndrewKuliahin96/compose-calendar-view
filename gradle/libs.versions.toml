@@ -2,9 +2,9 @@
 agp = "8.3.0"
 kotlin = "1.9.22"
 material = "1.11.0"
-androidx-compose = "1.6.2"
+androidx-compose = "1.6.3"
 androidx-activity-compose = "1.8.2"
-androidx-compose-material3 = "1.2.0"
+androidx-compose-material3 = "1.2.1"
 androidx-lifecycle-compose = "2.7.0"
 paging = "3.3.0-alpha04"
 
