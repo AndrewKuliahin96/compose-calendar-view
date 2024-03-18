@@ -33,6 +33,7 @@ import com.kuliahin.compose.calendarview.data.CalendarTheme
 import com.kuliahin.compose.calendarview.data.CalendarType
 import com.kuliahin.compose.calendarview.data.DateTheme
 import com.kuliahin.compose.calendarview.data.WeekdaysType
+import com.kuliahin.compose.calendarview.paging.MonthBounds
 import com.kuliahin.compose.calendarview.vm.CalendarViewModel
 import kotlinx.coroutines.Dispatchers
 import java.time.DayOfWeek
@@ -71,9 +72,14 @@ fun CalendarView(
     calendarSelection: CalendarSelection = CalendarSelection.None,
     onDateRender: (@Composable (LocalDate) -> DateTheme?)? = null,
     weekdaysType: WeekdaysType = WeekdaysType.Static,
+    monthBounds: MonthBounds = MonthBounds(),
     locale: Locale = LocalContext.current.resources.configuration.locales[0],
 ) {
-    val datesFlow by remember { mutableStateOf(viewModel.getDatesFlow(calendarType !is CalendarType.Horizontal.WeekSingleLine)) }
+    val datesFlow by remember {
+        mutableStateOf(
+            viewModel.getDatesFlow(calendarType !is CalendarType.Horizontal.WeekSingleLine, monthBounds),
+        )
+    }
     val lazyPagingItems = datesFlow.collectAsLazyPagingItems(Dispatchers.IO)
     val itemWidth = LocalConfiguration.current.screenWidthDp / DayOfWeek.entries.size
     val pagerState = rememberPagerState { lazyPagingItems.itemCount }

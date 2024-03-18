@@ -13,8 +13,10 @@ import com.kuliahin.compose.calendarview.data.CalendarSelection
 import com.kuliahin.compose.calendarview.data.CalendarType
 import com.kuliahin.compose.calendarview.data.DateTheme
 import com.kuliahin.compose.calendarview.data.WeekdaysType
+import com.kuliahin.compose.calendarview.paging.MonthBounds
 import com.kuliahin.compose.calendarview.ui.CalendarView
 import java.time.LocalDate
+import java.time.YearMonth
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val currentMonth = YearMonth.now()
+
         setContent {
             MaterialTheme {
                 Surface(
@@ -59,6 +64,11 @@ class MainActivity : AppCompatActivity() {
                                     ),
                             )
                         },
+                        monthBounds =
+                            MonthBounds(
+                                currentMonth.minusMonths(3),
+                                currentMonth.plusMonths(3),
+                            ),
                     )
                 }
             }
