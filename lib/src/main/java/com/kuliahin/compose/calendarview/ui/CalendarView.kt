@@ -48,7 +48,7 @@ import java.util.Locale
  * @param viewModel - [CalendarViewModel] or extended class to produce paging of dates.
  * @param onDateClick - day click callback.
  * @param theme - see [CalendarTheme] to customize day view. [CalendarTheme.DEFAULT] by default.
- * @param calendarType - can be [CalendarType.Horizontal.MonthMultiline], [CalendarType.Horizontal.WeekSingleLine] or [com.kuliahin.compose.calendarview.data.CalendarType.MonthMultilineVertical].
+ * @param calendarType - can be [CalendarType.Horizontal.MonthMultiline], [CalendarType.Horizontal.WeekSingleLine] or [com.kuliahin.compose.calendarview.data.CalendarType.VerticalMonthMultiline].
  * @param showHeader - set this value to false to hide calendar header with month name.
  * @param userScrollEnabled - set this value to false to prevent user scroll.
  * @param reverseLayout reverse the direction of scrolling and layout.
@@ -172,7 +172,7 @@ fun CalendarView(
                                     currentMonth,
                                 )
 
-                            is CalendarType.MonthMultilineVertical ->
+                            is CalendarType.VerticalMonthMultiline ->
                                 calendarType.onMonthChanged(
                                     currentMonth,
                                 )

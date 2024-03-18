@@ -37,7 +37,6 @@ open class DatesPagingSource(private val isMonthView: Boolean) :
 
                     MonthDates(yearMonth, dates)
                 }
-
             return LoadResult.Page(
                 data = listOf(monthDates),
                 prevKey = DatesKey(key.yearMonth.minusMonths(1), key.startOfWeekDate.minusWeeks(1)),

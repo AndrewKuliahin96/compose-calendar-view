@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -50,19 +49,14 @@ class MainActivity : AppCompatActivity() {
                             },
                         locale = Locale.US,
                         onDateRender = {
-                            val selectedColor = rainbowColors[it.dayOfMonth % rainbowColors.size]
-
-                            val valueTextColor =
-                                if (selectedColor == Color.Red || selectedColor == Color.Magenta) {
-                                    Color.Blue
-                                } else {
-                                    Color.Black
-                                }
-
                             DateTheme.DEFAULT.copy(
-                                selectedDateBackgroundColor = selectedColor.copy(alpha = 0.4F),
-                                selectedDateValueTextColor = valueTextColor,
-                                dateShape = CircleShape,
+                                currentMonthDayTheme =
+                                    DateTheme.DEFAULT.currentMonthDayTheme.copy(
+                                        dayBackgroundColor =
+                                            rainbowColors[it.dayOfMonth % rainbowColors.size].copy(
+                                                alpha = 0.4F,
+                                            ),
+                                    ),
                             )
                         },
                     )

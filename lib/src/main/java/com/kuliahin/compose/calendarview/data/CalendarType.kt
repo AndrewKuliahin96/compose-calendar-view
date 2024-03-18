@@ -7,9 +7,9 @@ import java.time.YearMonth
  * Class represents possible types of calendar.
  *
  * [Horizontal] - calendar can scroll only horizontally.
- * Can have month (multiline) [Horizontal.WeekSingleLine] or week [Horizontal.WeekSingleLine] (single line) representation.
+ * Can have month (multiline) [Horizontal.MonthMultiline] or week [Horizontal.WeekSingleLine] (single line) representation.
  *
- * [MonthMultilineVertical] - calendar can scroll only horizontally and have month representation.
+ * [VerticalMonthMultiline] - calendar can scroll only vertically and have month representation.
  */
 sealed class CalendarType {
     sealed class Horizontal : CalendarType() {
@@ -18,5 +18,5 @@ sealed class CalendarType {
         class WeekSingleLine(val onWeekChanged: (weekStartDay: LocalDate) -> Unit) : Horizontal()
     }
 
-    class MonthMultilineVertical(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : CalendarType()
+    class VerticalMonthMultiline(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : CalendarType()
 }

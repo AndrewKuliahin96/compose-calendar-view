@@ -63,33 +63,37 @@ fun CalendarBody(
                                     1 -> selectedDates.contains(date)
                                     2 ->
                                         !date.isBefore(selectedDates.first()) &&
-                                            !date.isAfter(
-                                                selectedDates.last(),
-                                            )
-
+                                            !date.isAfter(selectedDates.last())
                                     else -> false
                                 }
                         }
 
                     val dateTheme = onDateRender?.invoke(date) ?: theme.dateTheme
                     val isToday = date == LocalDate.now()
+                    val isCurrentMonth = date.month != monthDates.yearMonth.month
+
+                    val dayTheme =
+                        when {
+                            isToday -> dateTheme.todayTheme
+                            isCurrentMonth -> dateTheme.currentMonthDayTheme
+                            else -> dateTheme.otherMonthDayTheme
+                        }
 
                     val backgroundColor =
                         when {
-                            isToday && isSelected -> dateTheme.selectedTodayBackgroundColor
-                            isToday -> dateTheme.todayBackgroundColor
-                            isSelected -> dateTheme.selectedDateBackgroundColor
-                            else -> dateTheme.dateBackgroundColor
+                            isToday -> dayTheme.dayBackgroundColor
+                            isSelected -> dayTheme.daySelectedBackgroundColor
+                            else -> dayTheme.dayDisabledBackgroundColor
                         }
 
                     Box(
                         modifier =
                             Modifier
-                                .alpha(if (date.month != monthDates.yearMonth.month) 0.5f else 1f)
-                                .background(backgroundColor, shape = dateTheme.dateShape)
+                                .alpha(if (isCurrentMonth) 0.5f else 1f)
+                                .background(backgroundColor, shape = dayTheme.dayShape)
                                 .size(itemWidth.dp)
                                 .padding(5.dp)
-                                .clip(dateTheme.dateShape)
+                                .clip(dayTheme.dayShape)
                                 .clickable { onDateClick(date) },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -98,7 +102,7 @@ fun CalendarBody(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center,
-                            color = if (isSelected) dateTheme.selectedDateValueTextColor else dateTheme.dateValueTextColor,
+                            color = if (isSelected) dayTheme.daySelectedTextColor else dayTheme.dayTextColor,
                         )
                     }
                 }
