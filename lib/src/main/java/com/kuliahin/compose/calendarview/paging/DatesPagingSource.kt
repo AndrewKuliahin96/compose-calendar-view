@@ -3,6 +3,10 @@ package com.kuliahin.compose.calendarview.paging
 import android.os.Parcelable
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.kuliahin.compose.calendarview.data.Bounds
+import com.kuliahin.compose.calendarview.data.CalendarType
+import com.kuliahin.compose.calendarview.data.DateBounds
+import com.kuliahin.compose.calendarview.data.MonthBounds
 import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -11,16 +15,15 @@ import java.time.YearMonth
 /**
  * PagingSource for generating Calendar view dates.
  */
-open class DatesPagingSource(
-    private val isMonthView: Boolean,
-    private val monthBounds: MonthBounds,
-) : PagingSource<DatesKey, MonthDates>() {
+open class DatesPagingSource(private val calendarType: CalendarType) : PagingSource<DatesKey, MonthDates>() {
     override fun getRefreshKey(state: PagingState<DatesKey, MonthDates>): DatesKey? = null
 
     override suspend fun load(params: LoadParams<DatesKey>): LoadResult<DatesKey, MonthDates> {
         try {
             val key =
                 params.key ?: DatesKey(YearMonth.now(), LocalDate.now().with(DayOfWeek.MONDAY))
+
+            val isMonthView = calendarType !is CalendarType.Horizontal.WeekSingleLine
 
             val monthDates =
                 if (isMonthView) {
@@ -40,8 +43,7 @@ open class DatesPagingSource(
                     MonthDates(yearMonth, dates)
                 }
 
-            val isValid =
-                key.yearMonth >= monthBounds.startMonth && key.yearMonth <= monthBounds.endMonth
+            val isValid = isInBounds(key,calendarType.bounds )
 
             return LoadResult.Page(
                 data = if (isValid) listOf(monthDates) else emptyList(),
@@ -68,6 +70,14 @@ open class DatesPagingSource(
             return LoadResult.Error(e)
         }
     }
+
+    open fun isInBounds(key: DatesKey, bounds: Bounds): Boolean {
+       return when(bounds) {
+            is MonthBounds -> key.yearMonth >= bounds.startMonth && key.yearMonth <= bounds.endMonth
+            is DateBounds -> key.startOfWeekDate >= bounds.startDate && key.startOfWeekDate <= bounds.endDate
+            else -> true
+        }
+    }
 }
 
 /**
@@ -87,7 +97,3 @@ data class DatesKey(val yearMonth: YearMonth, val startOfWeekDate: LocalDate) : 
  */
 @Parcelize
 data class MonthDates(val yearMonth: YearMonth, val dates: List<LocalDate>) : Parcelable
-
-// TODO: To separate file
-// TODO: Currently it works just for month (maybe add it to CalendarType as parameter?)
-class MonthBounds(val startMonth: YearMonth? = null, val endMonth: YearMonth? = null)

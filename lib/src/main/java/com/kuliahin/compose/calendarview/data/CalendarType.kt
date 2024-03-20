@@ -11,12 +11,21 @@ import java.time.YearMonth
  *
  * [VerticalMonthMultiline] - calendar can scroll only vertically and have month representation.
  */
-sealed class CalendarType {
-    sealed class Horizontal : CalendarType() {
-        class MonthMultiline(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : Horizontal()
+sealed class CalendarType(open val bounds: Bounds) {
+    sealed class Horizontal(override val bounds: Bounds) : CalendarType(bounds) {
+        class MonthMultiline(
+            bounds: MonthBounds = MonthBounds(),
+            val onMonthChanged: (currentMonth: YearMonth) -> Unit
+        ) : Horizontal(bounds)
 
-        class WeekSingleLine(val onWeekChanged: (weekStartDay: LocalDate) -> Unit) : Horizontal()
+        class WeekSingleLine(
+            bounds: DateBounds = DateBounds(),
+            val onWeekChanged: (weekStartDay: LocalDate) -> Unit
+        ) : Horizontal(bounds)
     }
 
-    class VerticalMonthMultiline(val onMonthChanged: (currentMonth: YearMonth) -> Unit) : CalendarType()
+    class VerticalMonthMultiline(
+        monthBounds: MonthBounds = MonthBounds(),
+        val onMonthChanged: (currentMonth: YearMonth) -> Unit
+    ) : CalendarType(monthBounds)
 }
