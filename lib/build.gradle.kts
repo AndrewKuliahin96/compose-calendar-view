@@ -105,11 +105,14 @@ publishing {
 
     repositories {
         mavenCentral {
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+
             credentials {
                 username = System.getenv("CENTRAL_USERNAME")
                 password = System.getenv("CENTRAL_TOKEN")
             }
         }
+
 //        maven {
 //            credentials {
 //                username = System.getenv("CENTRAL_USERNAME")
