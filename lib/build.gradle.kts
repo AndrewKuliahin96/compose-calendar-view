@@ -112,13 +112,13 @@ publishing {
                 "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}".toByteArray(),
             ).toString(Charsets.UTF_8)
 
-            credentials(HttpHeaderCredentials::class.java) {
+            credentials(HttpHeaderCredentials::class) {
                 name = "Authorization"
                 value = "Bearer $userToken"
             }
 
             authentication {
-                create("Authorization", HttpHeaderAuthentication::class.java)
+                create<HttpHeaderAuthentication>("header")
             }
         }
     }
