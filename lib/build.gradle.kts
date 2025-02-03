@@ -1,4 +1,5 @@
 import org.gradle.internal.impldep.org.jsoup.safety.Safelist.basic
+import java.util.Base64
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -109,13 +110,16 @@ publishing {
         mavenCentral {
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
 
-            authentication {
-                create<BasicAuthentication>("basic")
+            val credentials = "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}"
+            val encodedCredentials = Base64.getEncoder().encodeToString(credentials.toByteArray())
+
+            credentials(HttpHeaderCredentials::class) {
+                name = "Authorization"
+                value = "UserToken $encodedCredentials"
             }
 
-            credentials {
-                username = System.getenv("CENTRAL_USERNAME")
-                password = System.getenv("CENTRAL_TOKEN")
+            authentication {
+                create<HttpHeaderAuthentication>("header")
             }
         }
     }
