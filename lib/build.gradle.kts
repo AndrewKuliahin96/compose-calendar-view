@@ -115,11 +115,7 @@ publishing {
 
             credentials(HttpHeaderCredentials::class) {
                 name = "Authorization"
-                value = "UserToken $encodedCredentials"
-            }
-
-            authentication {
-                create<HttpHeaderAuthentication>("header")
+                value = "Basic $encodedCredentials"
             }
         }
     }
