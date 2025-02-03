@@ -108,6 +108,8 @@ publishing {
 
     repositories {
         mavenCentral {
+            url = uri("https://repo1.maven.org/maven2/")
+
             val userToken = Base64.getEncoder().encode(
                 "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}".toByteArray(),
             ).toString(Charsets.UTF_8)
