@@ -1,4 +1,4 @@
-import org.gradle.internal.impldep.org.jsoup.safety.Safelist.basic
+import org.gradle.internal.impldep.com.google.api.client.auth.oauth2.BearerToken
 import java.util.Base64
 
 plugins {
@@ -108,13 +108,9 @@ publishing {
 
     repositories {
         mavenCentral {
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-
             val userToken = Base64.getEncoder().encode(
                 "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}".toByteArray(),
             ).toString(Charsets.UTF_8)
-
-//            requestBuilder.addHeader("Authorization", "Bearer userToken")
 
             credentials(HttpHeaderCredentials::class) {
                 name = "Authorization"
