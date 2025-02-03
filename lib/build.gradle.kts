@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.org.jsoup.safety.Safelist.basic
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -106,6 +108,10 @@ publishing {
     repositories {
         mavenCentral {
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
 
             credentials {
                 username = System.getenv("CENTRAL_USERNAME")
