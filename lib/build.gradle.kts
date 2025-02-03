@@ -110,12 +110,15 @@ publishing {
         mavenCentral {
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
 
-            val credentials = "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}"
-            val encodedCredentials = Base64.getEncoder().encodeToString(credentials.toByteArray())
+            val userToken = Base64.getEncoder().encode(
+                "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}".toByteArray(),
+            ).toString(Charsets.UTF_8)
+
+//            requestBuilder.addHeader("Authorization", "Bearer userToken")
 
             credentials(HttpHeaderCredentials::class) {
                 name = "Authorization"
-                value = "Basic $encodedCredentials"
+                value = "Bearer $userToken"
             }
         }
     }
