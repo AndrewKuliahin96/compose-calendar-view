@@ -105,25 +105,13 @@ publishing {
 
     repositories {
         mavenCentral {
-            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            url = uri("\"https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
 
             credentials {
                 username = System.getenv("CENTRAL_USERNAME")
                 password = System.getenv("CENTRAL_TOKEN")
             }
         }
-
-//        maven {
-//            credentials {
-//                username = System.getenv("CENTRAL_USERNAME")
-//                password = System.getenv("CENTRAL_TOKEN")
-//            }
-//
-//            val releasesRepoUrl = uri(layout.buildDirectory.dir("repos/releases"))
-//            val snapshotsRepoUrl = uri(layout.buildDirectory.dir("repos/snapshots"))
-//
-//            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-//        }
     }
 }
 
