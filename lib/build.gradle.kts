@@ -104,17 +104,23 @@ publishing {
     }
 
     repositories {
-        maven {
+        mavenCentral {
             credentials {
                 username = System.getenv("CENTRAL_USERNAME")
                 password = System.getenv("CENTRAL_TOKEN")
             }
-
-            val releasesRepoUrl = uri(layout.buildDirectory.dir("repos/releases"))
-            val snapshotsRepoUrl = uri(layout.buildDirectory.dir("repos/snapshots"))
-
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
         }
+//        maven {
+//            credentials {
+//                username = System.getenv("CENTRAL_USERNAME")
+//                password = System.getenv("CENTRAL_TOKEN")
+//            }
+//
+//            val releasesRepoUrl = uri(layout.buildDirectory.dir("repos/releases"))
+//            val snapshotsRepoUrl = uri(layout.buildDirectory.dir("repos/snapshots"))
+//
+//            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+//        }
     }
 }
 
