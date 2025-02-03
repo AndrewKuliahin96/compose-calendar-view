@@ -26,7 +26,7 @@ jobs:
         run: ./gradlew lib:assembleRelease
 
       - name: Publish to MavenCentral
-        run: ./gradlew publishToCentralPortal
+        run: ./gradlew publishMavenPublicationToMavenRepository
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
