@@ -72,7 +72,6 @@ publishing {
             groupId = "com.kuliahin"
             artifactId = "compose.calendar-view"
             version = System.getenv("RELEASE_VERSION") ?: ""
-            version = "1.2.0"
             description = "Android Compose Calendar View"
 
             pom {
@@ -107,8 +106,8 @@ publishing {
     }
 
     repositories {
-        mavenCentral {
-            url = uri("https://repo1.maven.org/maven2/")
+        maven {
+            url = uri("https://central.sonatype.com/api/v1/publisher/deployments/download/")
 
             val userToken = Base64.getEncoder().encode(
                 "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}".toByteArray(),
@@ -120,9 +119,11 @@ publishing {
             }
 
             authentication {
-                create<HttpHeaderAuthentication>("header")
+                create<HttpHeaderAuthentication>("Header")
             }
         }
+
+        mavenCentral()
     }
 }
 
