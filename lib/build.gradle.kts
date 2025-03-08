@@ -1,13 +1,15 @@
-import org.gradle.internal.impldep.com.google.api.client.auth.oauth2.BearerToken
-import java.util.Base64
-
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
+    id("net.thebugmc.gradle.sonatype-central-portal-publisher") version "1.2.4"
     `maven-publish`
     signing
 }
+
+description = "Android Compose Calendar View"
+group = "com.kuliahin"
+version = System.getenv("RELEASE_VERSION") ?: ""
 
 android {
     defaultConfig {
@@ -66,64 +68,37 @@ dependencies {
     implementation(libs.androidx.lifecycle.compose)
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "com.kuliahin"
-            artifactId = "compose.calendar-view"
-            version = System.getenv("RELEASE_VERSION") ?: ""
-            description = "Android Compose Calendar View"
+centralPortal {
+    name = "compose.calendar-view"
 
-            pom {
-                name = "Android Compose Calendar View"
-                description = "Android Compose Calendar View library"
-                url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
+    username = System.getenv("CENTRAL_USERNAME")
+    password = System.getenv("CENTRAL_TOKEN")
 
-                licenses {
-                    license {
-                        name = "MIT license"
-                        url =
-                            "https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE"
-                    }
-                }
+    pom {
+        name = "Android Compose Calendar View"
+        description = "Android Compose Calendar View library"
+        url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
 
-                developers {
-                    developer {
-                        name = "Andrew Kuliahin"
-                        email = "kulagin.andrew38@gmail.com"
-                        url = "https://github.com/AndrewKuliahin96"
-                    }
-                }
-
-                scm {
-                    connection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
-                    developerConnection =
-                        "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
-                    url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri("https://central.sonatype.com/api/v1/publisher/deployments/download/")
-
-            val userToken = Base64.getEncoder().encode(
-                "${System.getenv("CENTRAL_USERNAME")}:${System.getenv("CENTRAL_TOKEN")}".toByteArray(),
-            ).toString(Charsets.UTF_8)
-
-            credentials(HttpHeaderCredentials::class) {
-                name = "Authorization"
-                value = "Bearer $userToken"
-            }
-
-            authentication {
-                create<HttpHeaderAuthentication>("Header")
+        licenses {
+            license {
+                name = "MIT license"
+                url = "https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE"
             }
         }
 
-        mavenCentral()
+        developers {
+            developer {
+                name = "Andrew Kuliahin"
+                email = "kulagin.andrew38@gmail.com"
+                url = "https://github.com/AndrewKuliahin96"
+            }
+        }
+
+        scm {
+            connection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
+            developerConnection = "scm:git@github.com:AndrewKuliahin96/compose-calendar-view.git"
+            url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
+        }
     }
 }
 

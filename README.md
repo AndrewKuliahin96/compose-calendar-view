@@ -8,8 +8,8 @@ The repository hosts the open-source code of Android Compose Calendar library.
 ![Kotlin](https://kotlin-version.aws.icerock.dev/kotlin-version?group=com.kuliahin&name=compose.calendar-view)
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="pics/example_screenshot.webp" width="48%" alt="Example Screenshot">
-  <img src="pics/example_customization.webp" width="48%" alt="Example Customization">
+  <img src="pics/example_screenshot.webp" width="591" alt="Example Screenshot">
+  <img src="pics/example_customization.webp" width="591" alt="Example Customization">
 </div>
 
 ### Features
