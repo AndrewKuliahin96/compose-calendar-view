@@ -71,13 +71,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.compose)
 }
 
-mavenPublishing {
-    configure(AndroidSingleVariantLibrary(
-        variant = "release",
-        sourcesJar = true,
-        publishJavadocJar = true,
-    ))
-}
+//mavenPublishing {
+//    configure(AndroidSingleVariantLibrary(
+//        variant = "release",
+//        sourcesJar = true,
+//        publishJavadocJar = true,
+//    ))
+//}
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
