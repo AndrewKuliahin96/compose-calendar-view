@@ -1,8 +1,11 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
-    id("net.thebugmc.gradle.sonatype-central-portal-publisher") version "1.2.4"
+    id("com.vanniktech.maven.publish") version "0.31.0-rc2"
     `maven-publish`
     signing
 }
@@ -68,24 +71,31 @@ dependencies {
     implementation(libs.androidx.lifecycle.compose)
 }
 
-centralPortal {
-    name = "compose.calendar-view"
+mavenPublishing {
+    configure(AndroidSingleVariantLibrary(
+        variant = "release",
+        sourcesJar = true,
+        publishJavadocJar = true,
+    ))
+}
 
-    username = System.getenv("CENTRAL_USERNAME")
-    password = System.getenv("CENTRAL_TOKEN")
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    coordinates(group.toString(), "compose.calendar-view",  version.toString())
 
     pom {
-        name = "Android Compose Calendar View"
-        description = "Android Compose Calendar View library"
-        url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
+        name.set(description.toString())
+        description.set(description.toString())
+        url.set("https://github.com/AndrewKuliahin96/compose-calendar-view/")
 
         licenses {
             license {
-                name = "MIT license"
-                url = "https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE"
+                name.set("MIT License")
+                url.set("https://github.com/AndrewKuliahin96/compose-calendar-view/blob/main/LICENSE")
             }
         }
-
         developers {
             developer {
                 name = "Andrew Kuliahin"
@@ -100,12 +110,4 @@ centralPortal {
             url = "https://github.com/AndrewKuliahin96/compose-calendar-view"
         }
     }
-}
-
-signing {
-    useInMemoryPgpKeys(
-        System.getenv("SIGNING_KEY_ID"),
-        System.getenv("SIGNING_KEY"),
-        System.getenv("SIGNING_PASSWORD")
-    )
 }
