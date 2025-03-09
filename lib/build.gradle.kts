@@ -80,7 +80,7 @@ mavenPublishing {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.DEFAULT, automaticRelease = true)
     signAllPublications()
 
     coordinates(group.toString(), "compose.calendar-view",  version.toString())
