@@ -9,6 +9,10 @@ plugins {
     signing
 }
 
+description = "Android Compose Calendar View"
+group = "com.kuliahin"
+version = System.getenv("RELEASE_VERSION") ?: ""
+
 android {
     defaultConfig {
         namespace = "com.kuliahin.compose.calendarview"
@@ -61,10 +65,10 @@ dependencies {
 }
 
 mavenPublishing {
+    coordinates("com.kuliahin", "compose.calendar-view", System.getenv("RELEASE_VERSION") ?: "")
+
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
-
-    coordinates("com.kuliahin", "compose.calendar-view", System.getenv("RELEASE_VERSION")?.toString() ?: "")
 
     pom {
         name.set("Android Compose Calendar View")
