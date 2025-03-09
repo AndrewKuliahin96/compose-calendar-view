@@ -65,7 +65,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("com.kuliahin", "compose.calendar-view", System.getenv("RELEASE_VERSION") ?: "")
+    coordinates("com.kuliahin", "compose-calendarview", System.getenv("RELEASE_VERSION") ?: "")
 
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
