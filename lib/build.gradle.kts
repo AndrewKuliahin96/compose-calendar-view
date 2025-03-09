@@ -68,6 +68,7 @@ mavenPublishing {
 
     pom {
         name.set("Android Compose Calendar View")
+        description.set("Android Compose Calendar View")
         url.set("https://github.com/AndrewKuliahin96/compose-calendar-view/")
 
         licenses {
