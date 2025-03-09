@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
-    id("com.vanniktech.maven.publish") version "0.31.0-rc2"
+    id("com.vanniktech.maven.publish") version "0.31.0"
     `maven-publish`
     signing
 }
@@ -71,13 +71,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.compose)
 }
 
-//mavenPublishing {
-//    configure(AndroidSingleVariantLibrary(
-//        variant = "release",
-//        sourcesJar = true,
-//        publishJavadocJar = true,
-//    ))
-//}
+mavenPublishing {
+    configure(AndroidSingleVariantLibrary(
+        variant = "release",
+        sourcesJar = true,
+        publishJavadocJar = true,
+    ))
+}
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
