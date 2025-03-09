@@ -64,7 +64,7 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
 
-    coordinates("com.kuliahin", "compose.calendar-view", System.getenv("RELEASE_VERSION"))
+    coordinates("com.kuliahin", "compose.calendar-view", System.getenv("RELEASE_VERSION")?.toString() ?: "")
 
     pom {
         name.set("Android Compose Calendar View")
